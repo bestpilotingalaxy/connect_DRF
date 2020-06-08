@@ -71,12 +71,21 @@ class Review(models.Model):
     advert = models.ForeignKey(
         Advert,
         on_delete=models.CASCADE,
-        verbose_name='Отзыв'
+        verbose_name='Отзыв',
+        related_name='reviews'
+
     )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         verbose_name='Пользователь'
+    )
+    parent = models.ForeignKey(
+        'self',
+        verbose_name='Родитель',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True
     )
     text = models.TextField('Текст отзыва', max_length=1000)
     published = models.DateTimeField('Опубликовано', auto_now_add=True)
