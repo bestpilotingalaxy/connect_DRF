@@ -66,6 +66,9 @@ class Advert(models.Model):
         verbose_name = 'Обьявление'
         verbose_name_plural = 'Обьявления'
 
+    def __str__(self):
+        return self.title
+
 
 class Review(models.Model):
     advert = models.ForeignKey(
@@ -85,7 +88,8 @@ class Review(models.Model):
         verbose_name='Родитель',
         on_delete=models.SET_NULL,
         blank=True,
-        null=True
+        null=True,
+        related_name='children'
     )
     text = models.TextField('Текст отзыва', max_length=1000)
     published = models.DateTimeField('Опубликовано', auto_now_add=True)

@@ -15,6 +15,17 @@ class AdminAdvert(admin.ModelAdmin):
     )
 
 
+class AdminReview(admin.ModelAdmin):
+    list_display = (
+        'advert',
+        'user',
+        'id',
+        'parent',
+        'text',
+        'published'
+    )
+
+
 admin.site.register(Platform)
 admin.site.register(AdvertCategory)
 admin.site.register(ContentType)
