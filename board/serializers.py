@@ -1,10 +1,12 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
 from .models import Advert, Review
+from profiles.models import UserProfile
 
 
 class FilterReviewSerializer(serializers.ListSerializer):
-
+    """Filter primary review with parent=null"""
     def to_representation(self, data):
         data = data.filter(parent=None)
 
@@ -19,12 +21,21 @@ class RecursiveSerializer(serializers.Serializer):
         return serializer.data
 
 
+class AdvertOwnerSerializer(serializers.ModelSerializer):
+    """Serialize some User fields for list of adverts"""
+
+    class Meta:
+        model = User
+        fields = ('nickname', 'contact_link')
+
+
 class AdvertSerializer(serializers.ModelSerializer):
     """Advert list"""
+    owner = AdvertOwnerSerializer(read_only=True)
 
     class Meta:
         model = Advert
-        fields = ('id', 'user', 'title', 'published')
+        fields = ('id', 'owner', 'title', 'published')
 
 
 class ReviewCreateSerializer(serializers.ModelSerializer):

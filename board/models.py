@@ -40,7 +40,8 @@ class Advert(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='Пользователь'
+        verbose_name='Пользователь',
+        related_name='owner'
     )
     platform = models.ForeignKey(
         Platform,

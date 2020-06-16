@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'board.apps.BoardConfig',
-
+    'phone_field',
+    'profiles.apps.ProfilesConfig',
 ]
 
 MIDDLEWARE = [
