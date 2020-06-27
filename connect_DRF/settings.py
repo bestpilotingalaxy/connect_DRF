@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'board.apps.BoardConfig',
     'phone_field',
     'profiles.apps.ProfilesConfig',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +132,9 @@ STATICFILES_DIRS = [STATIC_DIR]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    )
+}

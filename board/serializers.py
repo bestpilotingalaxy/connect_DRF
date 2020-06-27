@@ -1,8 +1,7 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 
-from .models import Advert, Review
 from profiles.models import UserProfile
+from .models import Advert, Review
 
 
 class FilterReviewSerializer(serializers.ListSerializer):
@@ -22,20 +21,23 @@ class RecursiveSerializer(serializers.Serializer):
 
 
 class AdvertOwnerSerializer(serializers.ModelSerializer):
-    """Serialize some User fields for list of adverts"""
-
-    class Meta:
-        model = User
-        fields = ('nickname', 'contact_link')
+    """Get UserProfile object for each Advert and extract fields"""
+    def to_representation(self, value):
+        profile = UserProfile.objects.get(pk=value.pk)
+        context = {
+            'nickname': profile.nickname,
+            'contact_link': profile.contact_link
+        }
+        return context
 
 
 class AdvertSerializer(serializers.ModelSerializer):
     """Advert list"""
-    owner = AdvertOwnerSerializer(read_only=True)
+    user = AdvertOwnerSerializer(read_only=True)
 
     class Meta:
         model = Advert
-        fields = ('id', 'owner', 'title', 'published')
+        fields = ('id', 'user', 'title', 'price', 'published')
 
 
 class ReviewCreateSerializer(serializers.ModelSerializer):
@@ -72,3 +74,10 @@ class AdvertDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advert
         fields = '__all__'
+
+
+class AdvertCreateSerializer(serializers.ModelSerializer):
+    """Create Advert object"""
+    class Meta:
+        model = Advert
+        exclude = '__all__'
