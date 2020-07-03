@@ -58,9 +58,15 @@ class Advert(models.Model):
         verbose_name='Категория',
         on_delete=models.PROTECT
     )
+    price = models.DecimalField(
+        'Цена',
+        max_digits=9,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
     title = models.CharField('Заголовок', max_length=30, db_index=True)
     content = models.TextField('Описание', max_length=200)
-    price = models.IntegerField('Цена',  null=True, blank=True)
     published = models.DateTimeField('Опубликовано', auto_now_add=True)
 
     class Meta:
