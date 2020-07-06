@@ -29,15 +29,16 @@ class UserProfile(User):
     avatar = models.ImageField(
         'Аватар',
         upload_to='profile/',
-        default='profile/default_profile.png'
+        default='profile/default_profile.png',
+        blank=True
     )
-    nickname = models.CharField('Отображаемое имя', max_length=16)
+    nickname = models.CharField('Отображаемое имя', max_length=16, blank=True)
     about = models.TextField('О себе', max_length=250, blank=True)
-    contact_phone = PhoneField('Телефон для связи', blank=True, null=True)
-    contact_link = models.URLField('Ссылка для связи', blank=True, null=True)
+    contact_phone = PhoneField('Телефон для связи', blank=True)
+    contact_link = models.URLField('Ссылка для связи', blank=True)
 
     def __str__(self):
-        return self.username
+        return self.user.username
 
     class Meta:
         verbose_name = 'Профиль'

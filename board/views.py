@@ -1,52 +1,50 @@
 from rest_framework import permissions
-from rest_framework.generics import (
-    ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView,
-    DestroyAPIView
-)
+from rest_framework import viewsets
 
 from .serializers import (
-    AdvertSerializer, AdvertDetailSerializer, ReviewCreateSerializer,
-    AdvertCreateSerializer
+    AdvertSerializer, AdvertDetailSerializer,
+    ReviewCreateSerializer, AdvertCreateSerializer
 )
 from .models import Advert, Review
-from .service import AdvertFilter
+from .service import AdvertFilter, IsOwnerOrAdmin
 
 
-class AdvertListView(ListAPIView):
-    """Serialize queryset of adverts and return"""
+class AdvertViewSet(viewsets.ModelViewSet):
+    """Full CRUD actions for Advert model"""
     queryset = Advert.objects.all()
-    serializer_class = AdvertSerializer
-    # Filter queryset by some fields
     filterset_class = AdvertFilter
 
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [permissions.AllowAny]
+        elif self.action in ['update', 'destroy']:
+            permission_classes = [IsOwnerOrAdmin]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
 
-class AdvertDetailView(RetrieveAPIView):
-    """Serialize single advert object and return detail data"""
-    queryset = Advert.objects.all()
-    serializer_class = AdvertDetailSerializer
-    permission_classes = (permissions.IsAuthenticated, )
+        return [permission() for permission in permission_classes]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            serializer_class = AdvertSerializer
+        elif self.action == 'create':
+            serializer_class = AdvertCreateSerializer
+        else:
+            serializer_class = AdvertDetailSerializer
+
+        return serializer_class
 
 
-class AdvertUpdateView(UpdateAPIView):
-    """Update advert"""
-    serializer_class = AdvertDetailSerializer
-
-
-class AdvertCreateView(CreateAPIView):
-    """Create Advert object"""
-    serializer_class = AdvertCreateSerializer
-
-
-class AdvertDeleteView(DestroyAPIView):
-    queryset = Advert.objects.filter()
-
-
-class ReviewCreateView(CreateAPIView):
-    """Get POST data and create review"""
+class ReviewViewSet(viewsets.ModelViewSet):
+    """ViewSet for create & destroy actions for Review model"""
+    queryset = Review.objects.filter()
     serializer_class = ReviewCreateSerializer
 
+    def get_permissions(self):
+        if self.action in ['create']:
+            permission_classes = [permissions.IsAuthenticated]
+        elif self.action in ['destroy', 'update']:
+            permission_classes = [IsOwnerOrAdmin]
 
-class ReviewDeleteView(DestroyAPIView):
-    """Destroy review instance"""
-    queryset = Review.objects.filter()
-    permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
+

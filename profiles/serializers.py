@@ -5,6 +5,8 @@ from .models import UserProfile
 
 class ProfileSerializer(serializers.ModelSerializer):
     """Serialize UserProfile model object"""
+    user = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = UserProfile
         fields = (

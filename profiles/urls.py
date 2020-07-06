@@ -1,9 +1,10 @@
 from django.urls import path
+from rest_framework.routers import format_suffix_patterns
 
 from . import views
 
-urlpatterns = [
-    path('<int:pk>/', views.ProfileDetailView.as_view()),
-    # path('<int:pk>/update/', views.UpdateProfileView.as_view())
-]
-
+urlpatterns = format_suffix_patterns([
+    path('<int:pk>/', views.ProfileViewSet.as_view(
+        {'get': 'retrieve', 'put': 'update'}
+    )),
+])

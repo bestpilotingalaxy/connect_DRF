@@ -30,6 +30,10 @@ class AdvertOwnerSerializer(serializers.ModelSerializer):
         }
         return context
 
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
+
 
 class AdvertSerializer(serializers.ModelSerializer):
     """Advert list"""
@@ -80,4 +84,4 @@ class AdvertCreateSerializer(serializers.ModelSerializer):
     """Create Advert object"""
     class Meta:
         model = Advert
-        exclude = '__all__'
+        exclude = ['user']

@@ -1,27 +1,21 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from rest_framework import permissions
+from rest_framework import viewsets
 
 from .serializers import ProfileSerializer
 from .models import UserProfile
+from board.service import IsOwnerOrAdmin
 
 
-class ProfileDetailView(APIView):
-    """Detail profile information by 'GET' method"""
-    def get(self, request, pk):
-        profile = UserProfile.objects.get(pk=pk)
-        serializer = ProfileSerializer(profile)
+class ProfileViewSet(viewsets.ModelViewSet):
+    """CRUD for UserProfile model"""
+    queryset = UserProfile.objects.filter()
+    serializer_class = ProfileSerializer
 
-        return Response(serializer.data)
+    def get_permissions(self):
+        if self.action in ['retrieve']:
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [IsOwnerOrAdmin]
 
+        return [permission() for permission in permission_classes]
 
-# class UpdateProfileView(APIView):
-#     """Update profile info by 'POST' method"""
-#     def post(self, request, pk):
-#         profile = UserProfile.objects.get(pk=pk)
-#         new_profile = UpdateProfileSerializer(instance=profile,
-#                                               data=request.data)
-#         if new_profile.is_valid():
-#             new_profile.save()
-#
-#             return Response(status=201)
-#         return Response(status=404)
