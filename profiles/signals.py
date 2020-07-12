@@ -12,4 +12,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     Create a profile model with additional fields based on user data.
     """
     if created:
-        UserProfile.objects.create(user=instance)
+        try:
+            UserProfile.objects.create(user=instance)
+        except Exception as err:
+            print(err)

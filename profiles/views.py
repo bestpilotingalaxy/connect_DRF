@@ -1,19 +1,23 @@
 from rest_framework import permissions
 from rest_framework import viewsets
 
-from .serializers import ProfileSerializer
+from .serializers import ProfileSerializer, CreateProfileSerializer
 from .models import UserProfile
 from board.service import IsOwnerOrAdmin
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
     """CRUD for UserProfile model"""
-    queryset = UserProfile.objects.filter()
-    serializer_class = ProfileSerializer
+    queryset = UserProfile.objects.all()
+    serializer_class = CreateProfileSerializer
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(user=user)
 
     def get_permissions(self):
-        if self.action in ['retrieve']:
-            permission_classes = [permissions.IsAuthenticated]
+        if self.action in ['retrieve', 'create']:
+            permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [IsOwnerOrAdmin]
 

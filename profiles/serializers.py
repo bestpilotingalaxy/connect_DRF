@@ -17,8 +17,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         )
 
 
-# class UpdateProfileSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = UserProfile
-#         fields = '__all__'
+class CreateProfileSerializer(serializers.ModelSerializer):
+    """All profile fields"""
+    user = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
