@@ -13,6 +13,8 @@ def create_user_profile(sender, instance, created, **kwargs):
     """
     if created:
         try:
-            UserProfile.objects.create(user=instance)
+            print(instance)
+            UserProfile.objects.create(user=instance,)
         except Exception as err:
             print(err)
+            print(instance.id)

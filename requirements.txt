@@ -1,0 +1,13 @@
+Django==3.0.7
+django_debug_toolbar==2.2
+django_filter==2.3.0
+drf_yasg==1.17.1
+django_phone_field==1.8.1
+djangorestframework==3.11.1
+psycopg2-binary==2.8.5
+djoser==2.0.3
+Pillow==7.1.2
+pipreqs==0.4.10
+django-extensions==3.0.2
+django-rest-swagger==2.2.0
+djangorestframework-simplejwt==4.4.0
