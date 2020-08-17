@@ -1,9 +1,9 @@
 from rest_framework import permissions
 from rest_framework import viewsets
 
-from .serializers import ProfileSerializer, CreateProfileSerializer
+from .serializers import CreateProfileSerializer
 from .models import UserProfile
-from board.service import IsOwnerOrAdmin
+from Services.board.permissions import IsOwnerOrAdmin
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
